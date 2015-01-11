@@ -146,7 +146,7 @@ getBanned();
 
 
 function security(req, res, next) {
-  if (!req.query.id || !req.query.name) {
+  if (!req.query.id || !req.query.username) {
     res.send(false);
   }
   if (checkBanned(req.query.id)) {
