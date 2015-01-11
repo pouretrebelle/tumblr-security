@@ -3,12 +3,13 @@
 var express = require('express');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
+var cors = require('cors');
 
 var fileroot = 'https://pouretrebelle-security.herokuapp.com';
 
 // setup server
 var app = express();
-
+app.use(cors());
 
 
 // health check
