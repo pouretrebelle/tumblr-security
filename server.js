@@ -58,6 +58,12 @@ function saveBanned() {
 function addBanned(name) {
   banned.push(name);
 };
+function removeBanned(name) {
+  var i = banned.indexOf(name);
+  if (i > -1) {
+    banned.splice(i, 1);
+  }
+};
 function checkBanned(id) {
   return (banned.indexOf(id) > -1 ? true : false);
 };
@@ -160,6 +166,15 @@ function ban(req, res, next) {
     res.send('not authenticated');
   }
 };
+function unban(req, res, next) {
+  if (req.query.key == key) {
+    removeBanned(req.query.id);
+    saveBanned();
+    res.send('you\'ve successfully unbanned '+req.query.id);
+  } else {
+    res.send('not authenticated');
+  }
+};
 
 
 function bannedroute(req, res, next) {
@@ -200,6 +215,7 @@ setInterval(function() {
 
 // deal w/ the routing
 app.route('/ban').get(ban);
+app.route('/unban').get(unban);
 app.route('/banned').get(bannedroute);
 app.route('/loaded').get(loadedroute);
 app.route('/cheating').get(cheatingroute);
