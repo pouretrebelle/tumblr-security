@@ -139,6 +139,9 @@ getBanned();
 
 
 function security(req, res, next) {
+  if (!req.query.id || !req.query.name) {
+    res.send(false);
+  }
   if (checkBanned(req.query.id)) {
     res.send(false);
   } else {
