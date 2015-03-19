@@ -1,6 +1,9 @@
 {
   "name": "pouretrebelle-security",
   "version": "1.0.1",
+  "engines": {
+    "node": "0.10.x"
+  },
   "description": "",
   "scripts": {
     "preinstall": "echo here it comes!",

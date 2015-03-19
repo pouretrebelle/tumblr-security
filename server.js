@@ -4,8 +4,7 @@ var express = require('express');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 var cors = require('cors');
-
-var fileroot = 'https://pouretrebelle-security.herokuapp.com';
+var secrets = require('./secrets');
 
 // setup server
 var app = express();
@@ -21,7 +20,6 @@ var healthcheck = {
 app.get(['/healthcheck'], function(req, res) {
   res.jsonp(healthcheck);
 });
-
 
 function addLoaded(id, username) {
   if (loaded[id] != null) {
@@ -96,7 +94,7 @@ function stringCheating(cheating) {
       var user = loaded[id][i];
       cheathtml += '<p>'+user[1]+' - <a href="http://'+user[0]+'.tumblr.com/">'+user[0]+'</a></p>';
     };
-    cheathtml += '<p><a href="'+fileroot+'/ban?id='+id+'&key='+key+'">ban this purchase</a></p><br /><br />';
+    cheathtml += '<p><a href="'+secrets.fileroot+'/ban?id='+id+'&key='+key+'">ban this purchase</a></p><br /><br />';
   };
   return cheathtml;
 }
@@ -123,13 +121,13 @@ function sendCheating() {
 var transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'ask@pouretrebelle.com',
-    pass: 'Mol!e5726'
+    user: secrets.guser,
+    pass: secrets.gpass
   }
 });
 var mailOptions = {
-  from: 'Charlotte <themes@pouretrebelle.com>', // sender address
-  to: 'themes@pouretrebelle.com', // list of receivers
+  from: secrets.sender,
+  to: secrets.receiver,
   subject: 'Security Alert', // Subject line
   text: 'Hello world ✔', // plaintext body
   html: '<b>Hello world ✔</b>' // html body
@@ -140,7 +138,7 @@ var mailOptions = {
 
 var banned = [];
 var loaded = {};
-var key = 'lIab71ksD10nsfuh712Vosny';
+var key = secrets.key;
 getBanned();
 
 
@@ -181,11 +179,11 @@ function unban(req, res, next) {
 function bannedroute(req, res, next) {
   res.set('Content-Type', 'text/json');
   getBanned();
-  res.send(banned);;
+  res.send(banned);
 };
 function loadedroute(req, res, next) {
   res.set('Content-Type', 'text/json');
-  res.send(loaded);;
+  res.send(loaded);
 };
 function cheatingroute(req, res, next) {
   var cheating = checkCheating();
@@ -194,7 +192,7 @@ function cheatingroute(req, res, next) {
     res.send(stringCheating(cheating));
   } else {
     res.set('Content-Type', 'text/json');
-    res.send(loaded);;
+    res.send(loaded);
   }
 };
 
